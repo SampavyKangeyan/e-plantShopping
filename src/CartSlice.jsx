@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { useSelector } from "react-redux";
 
 export const CartSlice = createSlice({
   name: 'cart',
@@ -6,34 +7,18 @@ export const CartSlice = createSlice({
     items: [], // Initialize items as an empty array
   },
   reducers: {
-    addItem: (state, action) => {
-        const { name, image, cost } = action.payload;
-    
-        const existingItem = state.items.find(item => item.name === name);
-    
-        if (existingItem) {
-            existingItem.quantity += 1;
-        } else {
-            state.items.push({
-                name,
-                image,
-                cost,
-                quantity: 1,
-            });
-        }
-    },
-    removeItem: (state, action) => {
-        const { name } = action.payload;
-        state.items = state.items.filter(item => item.name !== name);
-    },
-    updateQuantity: (state, action) => {
-        const { name, quantity } = action.payload;
-    
-        const item = state.items.find(i => i.name === name);
-        if (item) {
-            item.quantity = Math.max(1, quantity); // prevents 0 or negative
-        }
-    }
+    dispatch(addItem({
+        name: plant.name,
+        image: plant.image,
+        cost: plant.cost
+    }));
+    dispatch(removeItem({
+    name: plant.name
+    }));
+    dispatch(updateQuantity({
+        name: plant.name,
+        quantity: newQty
+    }));
   },
 });
 
