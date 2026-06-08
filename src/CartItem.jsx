@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { removeItem, updateQuantity } from './CartSlice';
 import './CartItem.css';
@@ -6,7 +7,7 @@ import './CartItem.css';
 const CartItem = ({ onContinueShopping }) => {
   const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
-  const cost = parseFloat(item.cost?.substring(1) || 0);
+  const navigate = useNavigate();
 
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
@@ -27,9 +28,10 @@ const CartItem = ({ onContinueShopping }) => {
     0
   );
 
-  const handleContinueShopping = () => {
+const handleContinueShopping = (e) => {
+    e.preventDefault();
     onContinueShopping();
-  };
+};
 
   const handleCheckoutShopping = () => {
     alert("Functionality to be added for future reference");
@@ -48,12 +50,12 @@ const CartItem = ({ onContinueShopping }) => {
         })
       );
     } else {
-      dispatch(removeItem({ name: item.name }));
+      dispatch(removeItem(item.name));
     }
   };
 
   const handleRemove = (item) => {
-    dispatch(removeItem({ name: item.name}));
+    dispatch(removeItem(item.name));
   };
 
   const calculateTotalCost = (item) => {
@@ -64,6 +66,7 @@ const CartItem = ({ onContinueShopping }) => {
   return (
     <div className="cart-container">
       <h2 style={{ color: 'black' }}>Total Cart Amount: ${calculateTotalAmount().toFixed(2)}</h2>
+        <h3 style={{ color: 'black' }}> Total Items: {totalItems} </h3>
       <div>
         {cart.map(item => (
           <div className="cart-item" key={item.name}>
@@ -84,7 +87,12 @@ const CartItem = ({ onContinueShopping }) => {
       </div>
       <div style={{ marginTop: '20px', color: 'black' }} className='total_cart_amount'></div>
       <div className="continue_shopping_btn">
-        <button className="get-started-button" onClick={(e) => handleContinueShopping(e)}>Continue Shopping</button>
+        <button
+          className="get-started-button"
+          onClick={handleContinueShopping}
+        >
+          Continue Shopping
+        </button>       
         <br />
         <button className="get-started-button1" onClick={handleCheckoutShopping}>
         Checkout
